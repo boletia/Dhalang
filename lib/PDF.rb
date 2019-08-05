@@ -20,11 +20,11 @@ module Dhalang
       return binary_pdf_content
     end
 
-    def self.get_from_html(html)
+    def self.get_from_html(html, ticket_number)
       html_file = create_temporary_html_file(html)
       temporary_pdf_save_file = create_temporary_pdf_file
       begin
-        visit_page_with_puppeteer("file://" + html_file.path, temporary_pdf_save_file.path)
+        visit_page_with_puppeteer("file://" + html_file.path, temporary_pdf_save_file.path, ticket_number)
         binary_pdf_content = get_file_content_as_binary_string(temporary_pdf_save_file)
       ensure
         temporary_pdf_save_file.close unless temporary_pdf_save_file.closed?
@@ -54,8 +54,8 @@ module Dhalang
       return html_file
     end
 
-    def self.visit_page_with_puppeteer(page_to_visit, path_to_save_pdf_to)
-      system("node #{PDF_GENERATOR_JS_PATH} #{page_to_visit} #{Shellwords.escape(path_to_save_pdf_to)} #{Shellwords.escape(PROJECT_PATH)}")
+    def self.visit_page_with_puppeteer(page_to_visit, path_to_save_pdf_to, ticket_number = nil)
+      system("node #{PDF_GENERATOR_JS_PATH} #{page_to_visit} #{Shellwords.escape(path_to_save_pdf_to)} #{Shellwords.escape(PROJECT_PATH)} #{Shellwords.escape(ticket_number)}")
     end
 
     def self.get_file_content_as_binary_string(file)
