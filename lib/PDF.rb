@@ -26,11 +26,12 @@ module Dhalang
       begin
         visit_page_with_puppeteer("file://" + html_file.path, temporary_pdf_save_file.path, ticket_number)
         binary_pdf_content = get_file_content_as_binary_string(temporary_pdf_save_file)
+        p temporary_pdf_save_file.path
       ensure
         temporary_pdf_save_file.close unless temporary_pdf_save_file.closed?
         html_file.close unless html_file.closed?
-        temporary_pdf_save_file.unlink
-        html_file.unlink
+        #temporary_pdf_save_file.unlink
+        #html_file.unlink
       end
       return binary_pdf_content
     end
